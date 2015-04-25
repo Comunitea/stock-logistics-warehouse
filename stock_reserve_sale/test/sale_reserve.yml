@@ -33,6 +33,8 @@
     order_line:
       - product_id: product_gelato
         product_uom_qty: 4
+      - product_id: product_gelato
+        product_uom_qty: 1
 -
   I call the wizard to reserve the products of the sales order
 -

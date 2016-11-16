@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api
-from openerp.exceptions import except_orm
+from openerp.exceptions import UserError
 from openerp.tools.translate import _
 
 
@@ -210,12 +210,11 @@ class SaleOrderLine(models.Model):
             if not line.reservation_ids:
                 continue
             if len(line.reservation_ids) > 1:
-                raise except_orm(
-                    _('Error'),
+                raise UserError(
                     _('Several stock reservations are linked with the '
-                        'line. Impossible to adjust their quantity. '
-                        'Please release the reservation '
-                        'before changing the quantity.'))
+                      'line. Impossible to adjust their quantity. '
+                      'Please release the reservation '
+                      'before changing the quantity.'))
 
             line.reservation_ids.sudo().write({
                 'price_unit': line.price_unit,
@@ -234,8 +233,7 @@ class SaleOrderLine(models.Model):
         test_block = keys.intersection(block_on_reserve)
         test_update = keys.intersection(update_on_reserve)
         if test_block and len(self.mapped('reservation_ids')) > 0:
-            raise except_orm(
-                _('Error'),
+            raise UserError(
                 _('You cannot change the product or unit of measure '
                   'of lines with a stock reservation. '
                   'Release the reservation '

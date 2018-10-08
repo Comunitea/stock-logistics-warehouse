@@ -23,6 +23,7 @@ from openerp import models, fields, api
 from openerp.exceptions import UserError
 from openerp.tools.translate import _
 from openerp.tools.float_utils import float_compare
+import openerp.addons.decimal_precision as dp
 
 
 class SaleOrder(models.Model):
@@ -192,7 +193,11 @@ class SaleOrderLine(models.Model):
     def onchange_product_id_qty(self):
         reserved_qty = sum(self.reservation_ids.mapped('product_uom_qty'))
 
-        qty_equal = float_compare(self.product_uom_qty, reserved_qty) == 0.0
+        precision_digits = dp.get_precision(
+            'Product Unit of Measure')(self.env.cr)[1]
+        qty_equal = float_compare(
+            self.product_uom_qty, reserved_qty,
+            precision_digits=precision_digits) == 0.0
         if not qty_equal and self.reservation_ids:
             msg = _("As you changed the quantity of the line, "
                     "the quantity of the stock reservation will "

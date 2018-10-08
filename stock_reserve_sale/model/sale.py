@@ -22,6 +22,7 @@
 from openerp import models, fields, api
 from openerp.exceptions import UserError
 from openerp.tools.translate import _
+from openerp.tools.float_utils import float_compare
 
 
 class SaleOrder(models.Model):
@@ -191,7 +192,8 @@ class SaleOrderLine(models.Model):
     def onchange_product_id_qty(self):
         reserved_qty = sum(self.reservation_ids.mapped('product_uom_qty'))
 
-        if self.product_uom_qty != reserved_qty and self.reservation_ids:
+        qty_equal = float_compare(self.product_uom_qty, reserved_qty) == 0.0
+        if not qty_equal and self.reservation_ids:
             msg = _("As you changed the quantity of the line, "
                     "the quantity of the stock reservation will "
                     "be automatically adjusted to %.2f."

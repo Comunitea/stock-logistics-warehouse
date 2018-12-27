@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Guewen Baconnier, Leonardo Pistone
@@ -20,7 +19,7 @@
 ##############################################################################
 
 {'name': 'Stock Reserve Sales',
- 'version': '9.0.1.0.0',
+ 'version': '11.0.1.0.0',
  'author': "Camptocamp,Odoo Community Association (OCA)",
  'category': 'Warehouse',
  'license': 'AGPL-3',

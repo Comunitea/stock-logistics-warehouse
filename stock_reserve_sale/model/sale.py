@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Guewen Baconnier
@@ -19,11 +18,11 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
-from openerp.exceptions import UserError
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_compare
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_compare
+import odoo.addons.decimal_precision as dp
 
 
 class SaleOrder(models.Model):

@@ -227,24 +227,32 @@ class SaleOrderLine(models.Model):
                 'product_uom_qty': line.product_uom_qty,
             })
 
-    @api.multi
-    def write(self, vals):
+    def _test_block_on_reserve(self, vals):
         block_on_reserve = ('product_id',
                             'product_uom_id',
                             'type')
+        keys = set(vals.keys())
+        test_block = keys.intersection(block_on_reserve)
+        return test_block
+
+    def _test_update_on_reserve(self, vals):
         update_on_reserve = ('price_unit',
                              'product_uom_qty',
                              )
         keys = set(vals.keys())
-        test_block = keys.intersection(block_on_reserve)
         test_update = keys.intersection(update_on_reserve)
-        if test_block and len(self.mapped('reservation_ids')) > 0:
+        return test_update
+
+    @api.multi
+    def write(self, vals):
+        if self._test_block_on_reserve(vals) and \
+                len(self.mapped('reservation_ids')) > 0:
             raise UserError(
                 _('You cannot change the product or unit of measure '
                   'of lines with a stock reservation. '
                   'Release the reservation '
                   'before changing the product.'))
         res = super(SaleOrderLine, self).write(vals)
-        if test_update:
+        if self._test_update_on_reserve(vals):
             self._update_reservation_price_qty()
         return res

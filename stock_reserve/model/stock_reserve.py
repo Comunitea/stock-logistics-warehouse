@@ -163,7 +163,8 @@ class StockReservation(models.Model):
     @api.multi
     def unlink(self):
         """ Release the reservation before the unlink """
-        self.release()
+        for reserve in self:
+            reserve.release()
         return super(StockReservation, self).unlink()
 
     @api.onchange('product_id')

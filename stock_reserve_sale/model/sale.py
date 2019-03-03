@@ -115,9 +115,7 @@ class SaleOrderLine(models.Model):
         return False
 
     @api.multi
-    @api.depends('state',
-                 'product_id.route_ids',
-                 'product_id.type')
+    @api.depends('state', 'product_id', 'reservation_ids')
     def _compute_is_stock_reservation(self):
         for line in self:
             reservable = False
@@ -136,7 +134,7 @@ class SaleOrderLine(models.Model):
         copy=False)
     is_stock_reservable = fields.Boolean(
         compute='_compute_is_stock_reservation',
-        readonly=True,
+        readonly=True, store=True,
         string='Can be reserved')
 
     @api.multi

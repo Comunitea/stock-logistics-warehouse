@@ -146,6 +146,14 @@ class SaleOrderLine(models.Model):
         except AttributeError:
             owner_id = False
             # module sale_owner_stock_sourcing not installed, fine
+        if not self.order_id.procurement_group_id:
+            group_id = self.env['procurement.group'].create({
+                    'name': self.order_id.name,
+                    'move_type': self.order_id.picking_policy,
+                    'sale_id': self.order_id.id,
+                    'partner_id': self.order_id.partner_shipping_id.id,
+                })
+            self.order_id.procurement_group_id = group_id.id
 
         return {'product_id': self.product_id.id,
                 'product_uom': self.product_uom.id,
@@ -155,7 +163,9 @@ class SaleOrderLine(models.Model):
                 'note': note,
                 'price_unit': self.price_unit,
                 'sale_line_id': self.id,
+                'partner_id': self.order_id.partner_shipping_id.id,
                 'restrict_partner_id': owner_id,
+                'group_id': self.order_id.procurement_group_id.id
                 }
 
     @api.multi
@@ -170,14 +180,7 @@ class SaleOrderLine(models.Model):
             vals = line._prepare_stock_reservation(
                 date_validity=date_validity, note=note)
 
-            # Place picking_type_id in context. This is required
-            # to make reserve automaticaly find location_id and
-            # location_dest_id
-            pick_type_id = line.order_id.warehouse_id.int_type_id.id
-            reserv_obj_ctx = reserv_obj.with_context(
-                default_picking_type_id=pick_type_id)
-
-            reservations |= reserv_obj_ctx.create(vals)
+            reservations |= reserv_obj.create(vals)
         reservations.reserve()
         return True
 

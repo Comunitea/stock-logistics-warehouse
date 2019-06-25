@@ -122,7 +122,7 @@ class StockReservation(models.Model):
 
     @api.model
     def _default_picking_type_id(self):
-        ref = 'stock.picking_type_out'
+        ref = 'stock_reserve.picking_type_reserve'
         return self.env.ref(ref, raise_if_not_found=False).id
 
     @api.model

@@ -21,4 +21,20 @@
         <field name="code">model.release_validity_exceeded()</field>
     </record>
 
+    <record id="seq_picking_type_reserve" model="ir.sequence">
+        <field name="name">Reserves</field>
+        <field name="prefix">RSRV</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="picking_type_reserve" model="stock.picking.type">
+        <field name="name">Reserves</field>
+        <field name="sequence_id" ref="seq_picking_type_reserve"/>
+        <field name="code">outgoing</field>
+        <field name="warehouse_id" eval="False"/>
+        <field name="default_location_src_id" ref="stock.stock_location_stock"/>
+        <field name="default_location_dest_id" ref="stock_location_reservation"/>
+    </record>
+
 </odoo>

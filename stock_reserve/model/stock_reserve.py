@@ -139,7 +139,7 @@ class StockReservation(models.Model):
         """
         self.write({'date_expected': fields.Datetime.now()})
         moves = self.mapped('move_id')._action_confirm(merge=False)
-        moves.mapped('picking_id').action_assign()
+        moves._action_assign()
         return moves
 
     @api.multi

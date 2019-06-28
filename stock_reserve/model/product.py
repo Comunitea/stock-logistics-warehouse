@@ -59,7 +59,8 @@ class ProductProduct(models.Model):
     def _compute_reservation_count(self):
         for product in self:
             domain = [('product_id', '=', product.id),
-                      ('state', 'in', ['draft', 'confirmed', 'assigned'])]
+                      ('state', 'in', ['draft', 'confirmed', 'assigned', 
+                                       'partially_available'])]
             reservations = self.env['stock.reservation'].search(domain)
             product.reservation_count = sum(reservations.mapped('product_qty'))
 

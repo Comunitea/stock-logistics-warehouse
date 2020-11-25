@@ -64,9 +64,9 @@ class SaleOrder(models.Model):
         return True
 
     @api.multi
-    def action_confirm(self):
+    def _action_confirm(self):
         self.release_all_stock_reservation()
-        return super(SaleOrder, self).action_confirm()
+        return super(SaleOrder, self)._action_confirm()
 
     @api.multi
     def action_cancel(self):

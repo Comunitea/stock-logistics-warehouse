@@ -110,7 +110,7 @@ class StockMoveLine(models.Model):
             if 'product_uom_qty' in vals and vals['product_uom_qty'] == 0:
                 # The picking has been validated and product_uom_qty is
                 # reset to zero
-                move_line_qty = move.quantity_done
+                move_line_qty = rec.qty_done
             else:
                 move_line_qty = vals.get(
                     'product_uom_qty', rec.product_uom_qty)

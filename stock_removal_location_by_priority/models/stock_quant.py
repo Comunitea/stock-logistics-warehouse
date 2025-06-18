@@ -15,9 +15,7 @@ class StockQuant(models.Model):
 
     @api.model
     def _get_removal_strategy_domain_order(self, domain, removal_strategy, qty):
-        if self.user_has_groups(
-            "stock_removal_location_by_priority.group_removal_priority"
-        ):
+        if self.env.user.has_group("stock_removal_location_by_priority.group_removal_priority"):
             if removal_strategy == "fifo":
                 return domain, "in_date ASC, removal_priority ASC, id"
             elif removal_strategy == "lifo":
